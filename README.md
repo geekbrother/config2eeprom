@@ -8,7 +8,7 @@ Config2EEPROM using ArduinoJSON library to serialize data stored in EEPROM using
 //
 // This is an example of howto save and load data
 // to and from EEPROM using Config2EEPROM library.
-// Tested with Platform.io and Arduino with ESP8266.
+// Tested with Platform.io with ESP8266.
 //
 // Author: Max Kalashnikov
 // Git Repo: https://github.com/geekbrother/config2eeprom
