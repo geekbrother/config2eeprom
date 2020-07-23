@@ -4,6 +4,8 @@
 ## PlatformIO, Arduino library to store configs or arrays to EEPROM using ArduinoJSON library.
 Config2EEPROM uses ArduinoJSON library to serialize data and store it in EEPROM using per byte method. Library uses MsgPack serialization method instead of JSON to minimize bytes size and increase performance.
 
+By default maximum data size is 254 bytes, but it can be resized by `#define EEPROM_DOC_SIZE bytes_size`.
+
 ## See example:
 ```c++
 // Config2EEPROM config save and load to  EEPROM library.
