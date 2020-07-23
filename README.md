@@ -1,6 +1,6 @@
 # config2eeprom
 ## PlatformIO, Arduino library to store configs or arrays to EEPROM using ArduinoJSON library.
-Config2EEPROM using ArduinoJSON library to serialize data stored in EEPROM using per byte method. Library uses MsgPack serialization method instead of JSON to minimize bytes size and increase performance.
+Config2EEPROM uses ArduinoJSON library to serialize data and store it in EEPROM using per byte method. Library uses MsgPack serialization method instead of JSON to minimize bytes size and increase performance.
 
 ## See example:
 ```c++
