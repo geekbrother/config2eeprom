@@ -1,0 +1,23 @@
+{ 
+    "name": "config2eeprom",
+    "keywords": "eeprom, config, settings",
+    "description": "This is PlatformIO and Arduino library to simply store configs or JSON to EEPROM using ArduinoJSON library.",
+    "repository":
+    {
+      "type": "git",
+      "url": "git@github.com:geekbrother/config2eeprom.git"
+    },
+    "authors":
+    [
+      {
+        "name": "Max Kalashnikov",
+        "email": "geekmaks@gmail.com",
+        "url": "https://github.com/geekbrother",
+        "maintainer": true
+      }
+    ],
+    "dependencies": ["ArduinoJson"],
+    "version": "1.0.1",
+    "frameworks": "arduino",
+    "platforms": "*"
+  }
