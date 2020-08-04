@@ -6,7 +6,6 @@
 #include <ArduinoJson.h>
 
 #define EEPROM_DOC_SIZE 254 // Size of the config document
-#define EEPROM_STARTING_ADDR 0 // EEPROM starting address
 
 // StaticJsonDocument type for EEPROM_DOC_SIZE
 typedef StaticJsonDocument<EEPROM_DOC_SIZE> staticConfigDoc;
@@ -14,9 +13,13 @@ typedef StaticJsonDocument<EEPROM_DOC_SIZE> staticConfigDoc;
 class config2eeprom {
     public:
         config2eeprom();
+        config2eeprom(unsigned int beginByte);
         void save(staticConfigDoc doc);
         bool load(staticConfigDoc &doc);
         void clear();
+    private:
+        // Starting address
+        unsigned int _beginByte;
 };
 
 #endif // config2eeprom_H header guard

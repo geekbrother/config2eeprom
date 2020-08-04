@@ -1,6 +1,12 @@
 #include "config2eeprom.hpp"
 
+// Start with starting address 0 if not mentioned
 config2eeprom::config2eeprom(){
+    _beginByte = 0;
+}
+// Start with mentioned byte starting address
+config2eeprom::config2eeprom(unsigned int beginByte){
+    _beginByte = beginByte;
 }
 
 // Save staticDOC json hash to EEPROM
@@ -18,7 +24,7 @@ void config2eeprom::save( staticConfigDoc doc ){
     // Write to EEPROM byte by byte
     for(short n = 0; n < sizeof(serialized); n++) // automatically adjust for chars
     {
-        EEPROM.write(n + EEPROM_STARTING_ADDR, serialized[n]);
+        EEPROM.write(n + _beginByte, serialized[n]);
     }
 
     // Commit and unmount
@@ -39,7 +45,7 @@ bool config2eeprom::load(staticConfigDoc &doc){
     // Read from EEPROM byte by byte
     for(short n = 0; n < sizeof(serialized); n++) // automatically adjust for chars
     {
-        serialized[n] = EEPROM.read(n + EEPROM_STARTING_ADDR);
+        serialized[n] = EEPROM.read(n + _beginByte);
     }
 
     // Unmount eeprom
