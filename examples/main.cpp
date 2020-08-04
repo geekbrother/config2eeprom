@@ -16,6 +16,10 @@ String incoming;
 
 // Config class and map hash
 config2eeprom c2e;
+
+// You can pass starting address of eeprom instance if you need
+// config2eeprom c2e(256);
+
 staticConfigDoc configHash;
 
 void setup()
