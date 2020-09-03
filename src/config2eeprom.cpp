@@ -10,24 +10,19 @@ config2eeprom::config2eeprom(unsigned int beginByte)
 {
     _beginByte = beginByte;
 }
-// Begin on bite number and sets the doc Size
-config2eeprom::config2eeprom(unsigned int beginByte, unsigned int docSize)
-{
-    _beginByte = beginByte;
-    _docSize = docSize;
-}
 
 // Save staticDOC json hash to EEPROM
 void config2eeprom::save(staticConfigDoc doc)
 {
 #ifdef DEBUG_EEPROM
-    Serial.println("Config2EEPRom: Saving data.");
+    Serial.print("Config2EEPRom: Saving data from begin byte:");
+    Serial.println(_beginByte);
 #endif
 
     // Mount EEPROM partiton
-    EEPROM.begin(_docSize);
+    EEPROM.begin(EEPROM_SIZE);
 
-    char serialized[_docSize];
+    char serialized[EEPROM_DOC_SIZE];
     serializeMsgPack(doc, serialized);
 
     // Write to EEPROM byte by byte
@@ -37,7 +32,10 @@ void config2eeprom::save(staticConfigDoc doc)
     }
 
     // Commit and unmount
-    EEPROM.commit();
+    if (!EEPROM.commit())
+    {
+        Serial.print("Config2EEPRom: Error while commit to eeprom.");
+    }
     EEPROM.end();
 }
 
@@ -45,12 +43,14 @@ void config2eeprom::save(staticConfigDoc doc)
 bool config2eeprom::load(staticConfigDoc &doc)
 {
 #ifdef DEBUG_EEPROM
-    Serial.println("Config2EEProm: Loads from eeprom.");
+    Serial.print("Config2EEPRom: Loading data from begin byte:");
+    Serial.println(_beginByte);
 #endif
-    // Mount EEPROM partiton
-    EEPROM.begin(_docSize);
 
-    char serialized[_docSize];
+    // Mount EEPROM partiton
+    EEPROM.begin(EEPROM_SIZE);
+
+    char serialized[EEPROM_DOC_SIZE];
 
     // Read from EEPROM byte by byte
     for (short n = 0; n < sizeof(serialized); n++) // automatically adjust for chars
@@ -60,6 +60,11 @@ bool config2eeprom::load(staticConfigDoc &doc)
 
     // Unmount eeprom
     EEPROM.end();
+
+#ifdef DEBUG_EEPROM
+    Serial.println("Config2EEPRom: Got bytes from eeprom:");
+    Serial.println(serialized);
+#endif
 
     // Deserialize from msgPack
     DeserializationError error = deserializeMsgPack(doc, serialized);
@@ -84,7 +89,7 @@ bool config2eeprom::load(staticConfigDoc &doc)
 
 #ifdef DEBUG_EEPROM
     Serial.print("Config2EEProm: Deserialized document with size:");
-        Serial.println(doc.size();
+    Serial.println(doc.size());
 #endif
     return true;
 }
@@ -93,14 +98,18 @@ bool config2eeprom::load(staticConfigDoc &doc)
 void config2eeprom::clear()
 {
 #ifdef DEBUG_EEPROM
-    Serial.println("Config2EEProm: Clearing EEPROM.");
+    Serial.print("Config2EEPRom: Clearing EEPROM begin byte:");
+    Serial.println(_beginByte);
 #endif
 
-    EEPROM.begin(_docSize);
-    for (int i = 0; i < _docSize; i++)
+    EEPROM.begin(EEPROM_SIZE);
+    for (int i = 0; i < EEPROM_DOC_SIZE; i++)
     {
-        EEPROM.write(i, 0);
+        EEPROM.write(i + _beginByte, 0);
     }
-    EEPROM.commit();
+    if (!EEPROM.commit())
+    {
+        Serial.print("Config2EEPRom: Error while commit to eeprom.");
+    }
     EEPROM.end();
 }
